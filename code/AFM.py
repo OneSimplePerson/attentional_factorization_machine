@@ -38,12 +38,15 @@ def parse_args():
                         help='flag for pretrain. 1: initialize from pretrain; 0: randomly initialize; -1: save to pretrain file; 2: initialize from pretrain and save to pretrain file')
     parser.add_argument('--batch_size', type=int, default=4096,
                         help='Batch size.')
+    #注意力机制参数
     parser.add_argument('--attention', type=int, default=1,
                         help='flag for attention. 1: use attention; 0: no attention')
     parser.add_argument('--hidden_factor', nargs='?', default='[16,16]',
                         help='Number of hidden factors.')
     parser.add_argument('--lamda_attention', type=float, default=1e+2,
                         help='Regularizer for attention part.')
+    
+    
     parser.add_argument('--keep', nargs='?', default='[1.0,0.5]',
                         help='Keep probility (1-dropout) of each layer. 1: no dropout. The first index is for the attention-aware pairwise interaction layer.')
     parser.add_argument('--lr', type=float, default=0.1,
@@ -56,6 +59,7 @@ def parse_args():
                         help='Whether to show the performance of each epoch (0 or 1)')
     parser.add_argument('--batch_norm', type=int, default=0,
                     help='Whether to perform batch normaization (0 or 1)')
+    #衰变
     parser.add_argument('--decay', type=float, default=0.999,
                     help='Decay value for batch norm')
     parser.add_argument('--activation', nargs='?', default='relu',
@@ -69,14 +73,18 @@ class AFM(BaseEstimator, TransformerMixin):
         # bind params to class
         self.batch_size = batch_size
         self.learning_rate = learning_rate
+        #注意力机制
         self.attention = attention
         self.hidden_factor = hidden_factor
+        
         self.valid_dimension = valid_dimension
         self.activation_function = activation_function
         self.num_variable = num_variable
         self.save_file = save_file
         self.pretrain_flag = pretrain_flag
         self.features_M = features_M
+        
+        #注意力机制
         self.lamda_attention = lamda_attention
         self.keep = keep
         self.freeze_fm = freeze_fm
